@@ -17,9 +17,9 @@ export default function Sidebar() {
   const handleClose = () => setIsOpen(false);
 
   return (
-    <div className="flex">
+    <div className="flex fixed h-screen">
       {/* Sidebar for Large Screens */}
-      <aside className="hidden md:flex flex-col text-[#222] w-56 h-screen p-4 shadow-2xl bg-[#f1f1f1f1] font-semibold">
+      <aside className="hidden md:flex flex-col text-[#222] w-56 p-4 shadow-2xl bg-[#f1f1f1f1] font-semibold">
         {/* Logo */}
         <h2 className="mb-8 bg-[#0f204f45] p-3 text-center rounded-md flex items-center font-bold">
           <img className="w-8" src={logo} alt="" />
@@ -28,7 +28,7 @@ export default function Sidebar() {
         {/* Navigation Links */}
         <nav className="flex-1 space-y-4">
           <Link
-            to="/tasks"
+            to="/"
             className="flex items-center space-x-3 p-3 rounded-md hover:bg-[#0f204f45] transition-colors duration-300"
           >
             <ClipboardCheck /> <span>All Tasks</span>
@@ -63,7 +63,7 @@ export default function Sidebar() {
       </aside>
 
       {/* Mobile Menu Button */}
-      <button className="md:hidden p-4" onClick={() => setIsOpen(!isOpen)}>
+      <button className="fixed md:hidden p-4" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? <X size={30} /> : <Menu size={30} />}
       </button>
 
