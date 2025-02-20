@@ -1,12 +1,15 @@
-import { Route, Routes } from "react-router";
+import { Link, Route, Routes } from "react-router";
 import Navbar from "./Components/Navbar";
 import Tasks from "./Layout/Tasks";
-
+import Login from "./Pages/Login";
+import { useContext } from "react";
+import { AuthContext } from "./AuthProvider/AuthProvider";
 const App = () => {
+  const { logOut } = useContext(AuthContext);
   return (
     <>
       <section className="flex">
-        <div className="lg:w-64 w-[50px]">
+        <div className="lg:w-64 w-[40px]">
           <Navbar></Navbar>
         </div>
         <div className="w-11/12 mx-auto">
@@ -34,22 +37,25 @@ const App = () => {
                 class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
               >
                 <li>
-                  <a className="justify-between">
+                  <Link className="justify-between">
                     Profile
                     <span className="badge">New</span>
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a>Settings</a>
+                  <Link>Settings</Link>
                 </li>
                 <li>
-                  <a>Logout</a>
+                  <Link to="/login" onClick={logOut}>
+                    Logout
+                  </Link>
                 </li>
               </ul>
             </div>
           </div>
           <Routes>
-            <Route index path="/" element={<Tasks></Tasks>}></Route>
+            <Route index element={<Tasks></Tasks>}></Route>
+            <Route path="/login" element={<Login></Login>}></Route>
           </Routes>
         </div>
       </section>

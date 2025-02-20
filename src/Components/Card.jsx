@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 const Card = ({ item }) => {
-  const { title, description, category } = item;
+  const { name, description, category } = item;
   const today = new Date();
   const date = today.toLocaleDateString("en-GB", {
     weekday: "short",
@@ -13,7 +13,8 @@ const Card = ({ item }) => {
   return (
     <div className="bg-base-100 px-6 py-3 rounded-md shadow-md  transform transition duration-300 hover:scale-95">
       <div>
-        <h2 className="font-bold text-green-700">{title}</h2>
+
+        <h2 className="font-bold text-green-700">{name}</h2>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="absolute top-2 right-2 p-2 text-gray-600 hover:bg-gray-300 rounded-full transition"
