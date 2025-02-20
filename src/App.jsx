@@ -1,18 +1,16 @@
 import { Route, Routes } from "react-router";
 import Navbar from "./Components/Navbar";
-import Home from "./Layout/Home";
 import Tasks from "./Layout/Tasks";
 
 const App = () => {
   return (
     <>
       <section className="flex">
-        <div>
+        <div className="w-64">
           <Navbar></Navbar>
         </div>
-        <div>
+        <div className="w-full">
           <Routes>
-            <Route index element={<Home></Home>}></Route>
             <Route path="/tasks" element={<Tasks></Tasks>}></Route>
           </Routes>
         </div>

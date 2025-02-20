@@ -3,15 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
   X,
-  Home,
   LogOut,
   ClipboardCheck,
-  LayoutDashboard,
   Loader,
   CalendarCheck2,
   BookOpenCheck,
 } from "lucide-react";
 import { Link } from "react-router";
+import logo from "../assets/task.png"
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +21,8 @@ export default function Sidebar() {
       {/* Sidebar for Large Screens */}
       <aside className="hidden md:flex flex-col text-[#222] w-56 h-screen p-4 shadow-2xl bg-[#f1f1f1f1] font-semibold">
         {/* Logo */}
-        <h2 className="mb-8 bg-[#0f204f45] p-3 text-center rounded-md">
+        <h2 className="mb-8 bg-[#0f204f45] p-3 text-center rounded-md flex items-center font-bold">
+          <img className="w-8" src={logo} alt="" />
           Ahbab's Tasks
         </h2>
         {/* Navigation Links */}
@@ -83,7 +83,7 @@ export default function Sidebar() {
             </button>
 
             {/* Logo */}
-            <h1 className="text-2xl font-bold mb-10 p-3 bg-[#0f204f45] rounded-md">Ahbab's Tasks</h1>
+            <h1 className="text-2xl font-bold mb-10 p-3 bg-[#0f204f45] rounded-md flex items-center"> <img className="w-8" src={logo} alt="" />Ahbab's Tasks</h1>
 
             {/* Navigation Links */}
             <nav className="flex-1 space-y-4">
