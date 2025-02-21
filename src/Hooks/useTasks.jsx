@@ -5,13 +5,16 @@ import { AuthContext } from "../AuthProvider/AuthProvider";
 
 const useTasks = () => {
   const { user } = useContext(AuthContext);
-  const { data: allTasks = [], refetch } = useQuery({
-    queryKey: ["tasks"],
+  const {
+    data: allTasks = [],
+    refetch,
+    isLoading,
+  } = useQuery({
+    queryKey: ["task", user?.email],
     queryFn: async () => {
       const res = await axios.get(
         `${import.meta.env.VITE_URL}/tasks/${user?.email}`
       );
-      console.log(res.data)
       return res.data;
     },
   });

@@ -18,7 +18,7 @@ const SocialLogin = () => {
         .post(`${import.meta.env.VITE_URL}/addUser`, userInfo)
         .then((res) => {
           console.log(res.data);
-          navigate("/tasks");
+          navigate("/");
         })
         .catch((error) => {
           console.log(error);
