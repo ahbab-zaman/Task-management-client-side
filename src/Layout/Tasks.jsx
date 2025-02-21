@@ -36,18 +36,19 @@ const Tasks = () => {
       .then((res) => {
         console.log(res.data);
         if (res.data.insertedId) {
+          formRef.current.reset();
+          refetch();
           toast.success("Task Added Successfully");
         }
       })
       .catch((error) => {
         console.log(error);
-        formRef.current.reset();
       });
     document.getElementById("my_modal_5").close();
   };
   return (
     <>
-      <section className="p-6 w-11/12 mx-auto">
+      <section className="pt-28 w-11/12 mx-auto">
         <div className="flex lg:flex-row flex-col gap-3 justify-between">
           <TItle title="All Tasks"></TItle>
           <div>
@@ -65,6 +66,7 @@ const Tasks = () => {
           ))}
         </div>
       </section>
+
       <form ref={formRef} onSubmit={handleAddTask}>
         <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
           <div className="modal-box">
@@ -75,7 +77,8 @@ const Tasks = () => {
               <input
                 name="name"
                 type="text"
-                placeholder="Type here"
+                placeholder="Type Title"
+                required
                 className="input input-bordered w-full"
               />
             </label>
@@ -86,6 +89,7 @@ const Tasks = () => {
               </div>
               <textarea
                 name="description"
+                required
                 placeholder="Add Your Description"
                 className="w-full rounded-md h-[150px] resize-none textarea"
               ></textarea>
@@ -93,17 +97,18 @@ const Tasks = () => {
 
             <select
               name="category"
+              required
               defaultValue="Select Category"
               className="select my-4 w-full"
             >
               <option defaultValue="default">Select Category</option>
-              <option value="todo">To Do</option>
-              <option value="inProgress">In Progress</option>
-              <option value="done">Done</option>
+              <option value="To Do">To Do</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Done">Done</option>
             </select>
 
-            <div className="modal-action justify-center w-full">
-              <div method="dialog w-full">
+            <div className="modal-action justify-center w-full modal-backdrop">
+              <div method="dialog w-full ">
                 <button className="bg-[#6d7070] font-bold px-4 py-2 rounded-md text-white flex items-center hover:bg-[#f1f1f1] hover:text-black transition-all duration-300">
                   Create
                 </button>
