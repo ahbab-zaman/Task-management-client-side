@@ -80,26 +80,47 @@ const Navbar = () => {
           </button>
         </div>
         <div className="flex flex-col space-y-4 p-5">
-          <Link to="/" className="hover:text-blue-500" onClick={closeMenu}>
-            Home
-          </Link>
-          <Link to="/about" className="hover:text-blue-500" onClick={closeMenu}>
-            About
-          </Link>
-          <Link
-            to="/services"
-            className="hover:text-blue-500"
+          <NavLink
+            to="/"
+            className={(isActive) =>
+              isActive
+                ? "bg-blue-500 px-4 py-2 rounded-md font-semibold text-white"
+                : "bg-base-100"
+            }
             onClick={closeMenu}
           >
-            Services
-          </Link>
-          <Link
-            to="/contact"
-            className="hover:text-blue-500"
-            onClick={closeMenu}
-          >
-            Contact
-          </Link>
+            Tasks
+          </NavLink>
+          {user ? (
+            <NavLink
+              className={(isActive) =>
+                isActive
+                  ? "bg-blue-500 px-4 py-2 rounded-md font-semibold text-white"
+                  : "bg-base-100"
+              }
+              to="/login"
+            >
+              <button
+                onClick={logOut}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-[#f1f1f1] hover:text-[#222] transition-all duration-300"
+              >
+                Logout
+              </button>
+            </NavLink>
+          ) : (
+            <NavLink
+              className={(isActive) =>
+                isActive
+                  ? "bg-blue-500 px-4 py-2 rounded-md font-semibold text-white"
+                  : "bg-base-100"
+              }
+              to="login"
+            >
+              <button className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-[#f1f1f1] hover:text-[#222] transition-all duration-300">
+                Logout
+              </button>
+            </NavLink>
+          )}
         </div>
       </div>
     </nav>

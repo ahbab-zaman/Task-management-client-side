@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../AuthProvider/AuthProvider";
 import googleImg from "../assets/signIn.png";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Loading from "../Components/Loading";
 const SocialLogin = () => {
   const { googleSignIn, loading } = useContext(AuthContext);
@@ -27,15 +27,15 @@ const SocialLogin = () => {
   };
   if (loading) return <Loading></Loading>;
   return (
-    <div>
+    <div className="w-full h-[200px] flex justify-center items-center">
       <div
         onClick={handleGoogleSignIn}
-        className="flex justify-between items-center lg:w-[90%] w-full mx-auto border p-3 rounded-full bg-white"
+        className="flex lg:flex-row flex-col justify-between items-center lg:w-[90%] w-full mx-auto border p-3 rounded-full bg-white"
       >
         <div>
-          <img className="w-8" src={googleImg} alt="" />
+          <img className="lg:w-8 w-6" src={googleImg} alt="" />
         </div>
-        <div className="text-[#333333] text-lg font-bold">
+        <div className="text-[#333333] lg:text-lg text-base font-bold">
           Login With Google
         </div>
         <div></div>

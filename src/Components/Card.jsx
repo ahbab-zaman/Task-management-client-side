@@ -46,7 +46,7 @@ const Card = ({ item }) => {
   };
 
   // Delete Task
-  const handleDelete = (id) => {
+  const handleDelete = () => {
     showDeleteToast(() => {
       axios
         .delete(`${import.meta.env.VITE_URL}/tasks/${_id}`)

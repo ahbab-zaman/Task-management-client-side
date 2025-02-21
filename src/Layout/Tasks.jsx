@@ -9,16 +9,12 @@ import { AuthContext } from "../AuthProvider/AuthProvider";
 import Loading from "../Components/Loading";
 import { Dialog, DialogPanel } from "@headlessui/react";
 const Tasks = () => {
-  const [allTasks, refetch] = useTasks();
-  // let [isOpen, setIsOpen] = useState(false);
+  const [allTasks, refetch] = useTasks() || [];
   const formRef = useRef(null);
   const { user, loading } = useContext(AuthContext);
   const toDo = allTasks.filter((item) => item.category === "To Do");
   const inProgress = allTasks.filter((item) => item.category === "In Progress");
   const done = allTasks.filter((item) => item.category === "Done");
-  console.log(toDo);
-  console.log(inProgress);
-  console.log(done);
 
   const handleAddTask = (e) => {
     e.preventDefault();
@@ -71,11 +67,12 @@ const Tasks = () => {
           </div>
         </div>
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-5 py-6">
+          {/* To Do List */}
           <div className="space-y-2 bg-[#f1f1f1] p-4 rounded-md">
             <h2 className="text-lg font-bold">TO DO</h2>
             {toDo.length > 0 ? (
               <>
-                {toDo.map((item) => (
+                {toDo.map((item, index) => (
                   <Card item={item} key={item._id}></Card>
                 ))}
               </>
@@ -84,11 +81,12 @@ const Tasks = () => {
             )}
           </div>
 
+          {/* In Progress List */}
           <div className="space-y-2 bg-[#f1f1f1] p-4 rounded-md">
             <h2 className="text-lg font-bold">In Progress</h2>
             {inProgress.length > 0 ? (
               <>
-                {inProgress.map((item) => (
+                {inProgress.map((item, index) => (
                   <Card item={item} key={item._id}></Card>
                 ))}
               </>
@@ -99,11 +97,12 @@ const Tasks = () => {
             )}
           </div>
 
+          {/* Done List */}
           <div className="space-y-2 bg-[#f1f1f1] p-4 rounded-md">
             <h2 className="text-lg font-bold">Done</h2>
             {done.length > 0 ? (
               <>
-                {done.map((item) => (
+                {done.map((item, index) => (
                   <Card item={item} key={item._id}></Card>
                 ))}
               </>

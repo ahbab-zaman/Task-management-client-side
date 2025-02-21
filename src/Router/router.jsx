@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import Root from "../Layout/Root";
 import Tasks from "../Layout/Tasks";
 import Login from "../Pages/Login";
+import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -10,7 +11,12 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Tasks></Tasks>,
+        element: (
+          <PrivateRoute>
+            {" "}
+            <Tasks></Tasks>
+          </PrivateRoute>
+        ),
       },
     ],
   },
