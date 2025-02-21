@@ -15,6 +15,10 @@ const Tasks = () => {
   const toDo = allTasks.filter((item) => item.category === "To Do");
   const inProgress = allTasks.filter((item) => item.category === "In Progress");
   const done = allTasks.filter((item) => item.category === "Done");
+  console.log(toDo);
+  console.log(inProgress);
+  console.log(done);
+
   const handleAddTask = (e) => {
     e.preventDefault();
     console.log("Form Submit");
@@ -76,7 +80,7 @@ const Tasks = () => {
                 ))}
               </>
             ) : (
-              <>No To Do Tasks</>
+              <h2 className="text-xl font-bold text-center">No To Do Tasks</h2>
             )}
           </div>
 
@@ -84,7 +88,7 @@ const Tasks = () => {
             <h2 className="text-lg font-bold">In Progress</h2>
             {inProgress.length > 0 ? (
               <>
-                {toDo.map((item) => (
+                {inProgress.map((item) => (
                   <Card item={item} key={item._id}></Card>
                 ))}
               </>

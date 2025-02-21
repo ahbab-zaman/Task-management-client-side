@@ -1,8 +1,13 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { CiEdit } from "react-icons/ci";
+import { MdDeleteOutline } from "react-icons/md";
+import useTasks from "../Hooks/useTasks";
 
 const Card = ({ item }) => {
-  const { name, description, category } = item;
+  const [, refetch] = useTasks();
+  const { name, description, category, _id } = item;
   const today = new Date();
   const date = today.toLocaleDateString("en-GB", {
     weekday: "short",
@@ -10,10 +15,32 @@ const Card = ({ item }) => {
     month: "short",
   });
   const [isOpen, setIsOpen] = useState(false);
+
+  // Edit Task
+
+  const handleEdit = (e) => {
+    document.getElementById("my_modal_5").showModal();
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const description = form.description.value;
+    const category = form.category.value;
+    const updatedInfo = { name, description, category };
+    axios
+      .put(`${import.meta.env.VITE_URL}/tasks/${_id}`, updatedInfo)
+      .then((res) => {
+        document.getElementById("my_modal_5").close();
+        console.log(res.data);
+        refetch();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="bg-base-100 px-6 py-3 rounded-md shadow-md  transform transition duration-300 hover:scale-95">
       <div>
-
         <h2 className="font-bold text-green-700">{name}</h2>
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -26,16 +53,16 @@ const Card = ({ item }) => {
         {isOpen && (
           <div className="absolute right-2 top-10 w-32 bg-white shadow-lg rounded-lg py-2 transition-opacity duration-300 animate-fade-in">
             <button
-              className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-              onClick={() => alert("Edit clicked")}
+              onClick={handleEdit}
+              className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center gap-2 font-bold"
             >
-              ✏️ Edit
+              <CiEdit className="text-lg"></CiEdit> Edit
             </button>
             <button
-              className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
-              onClick={() => alert("Delete clicked")}
+              className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 flex items-center font-bold gap-2 text-lg"
+              onClick={"clicked"}
             >
-              🗑 Delete
+              <MdDeleteOutline></MdDeleteOutline> Delete
             </button>
           </div>
         )}
@@ -57,6 +84,58 @@ const Card = ({ item }) => {
         </p>
         <p className="font-bold text-sm">{date}</p>
       </div>
+      <form onSubmit={handleEdit}>
+        <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+          <div className="modal-box">
+            <label className="form-control w-full">
+              <div className="label mb-2">
+                <span className="label-text">Title Name</span>
+              </div>
+              <input
+                name="name"
+                defaultValue={name}
+                type="text"
+                placeholder="Type Title"
+                required
+                className="input input-bordered w-full"
+              />
+            </label>
+
+            <label className="form-control w-full">
+              <div className="label mb-2">
+                <span className="label-text">Description</span>
+              </div>
+              <textarea
+                name="description"
+                defaultValue={description}
+                required
+                placeholder="Add Your Description"
+                className="w-full rounded-md h-[150px] resize-none textarea"
+              ></textarea>
+            </label>
+
+            <select
+              name="category"
+              defaultValue={category}
+              required
+              className="select my-4 w-full"
+            >
+              <option disabled>Select Category</option>
+              <option value="To Do">To Do</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Done">Done</option>
+            </select>
+
+            <div className="modal-action justify-center w-full modal-backdrop">
+              <div method="dialog w-full ">
+                <button className="bg-[#6d7070] font-bold px-4 py-2 rounded-md text-white flex items-center hover:bg-[#f1f1f1] hover:text-black transition-all duration-300">
+                  Create
+                </button>
+              </div>
+            </div>
+          </div>
+        </dialog>
+      </form>
     </div>
   );
 };
