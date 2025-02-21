@@ -4,7 +4,8 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 import useTasks from "../Hooks/useTasks";
-
+import showDeleteToast from "./showDeleteToast";
+import toast from "react-hot-toast";
 const Card = ({ item }) => {
   const [, refetch] = useTasks();
   const { name, description, category, _id } = item;
@@ -16,8 +17,13 @@ const Card = ({ item }) => {
   });
   const [isOpen, setIsOpen] = useState(false);
 
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
   // Edit Task
-
   const handleEdit = (e) => {
     document.getElementById("my_modal_5").showModal();
     e.preventDefault();
@@ -36,6 +42,25 @@ const Card = ({ item }) => {
       .catch((error) => {
         console.log(error);
       });
+    closeMenu();
+  };
+
+  // Delete Task
+  const handleDelete = (id) => {
+    showDeleteToast(() => {
+      axios
+        .delete(`${import.meta.env.VITE_URL}/tasks/${_id}`)
+        .then((res) => {
+          if (res.data.deletedCount > 0) {
+            refetch();
+            toast.success("Task Deleted Successfully");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      closeMenu();
+    });
   };
 
   return (
@@ -43,7 +68,7 @@ const Card = ({ item }) => {
       <div>
         <h2 className="font-bold text-green-700">{name}</h2>
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={toggleMenu}
           className="absolute top-2 right-2 p-2 text-gray-600 hover:bg-gray-300 rounded-full transition"
         >
           <BsThreeDotsVertical></BsThreeDotsVertical>
@@ -59,8 +84,8 @@ const Card = ({ item }) => {
               <CiEdit className="text-lg"></CiEdit> Edit
             </button>
             <button
+              onClick={() => handleDelete(_id)}
               className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 flex items-center font-bold gap-2 text-lg"
-              onClick={"clicked"}
             >
               <MdDeleteOutline></MdDeleteOutline> Delete
             </button>

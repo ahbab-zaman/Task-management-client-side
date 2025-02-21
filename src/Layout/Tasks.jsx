@@ -4,12 +4,13 @@ import TItle from "../SharedFiles/TItle";
 import Card from "../Components/Card";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../AuthProvider/AuthProvider";
 import Loading from "../Components/Loading";
+import { Dialog, DialogPanel } from "@headlessui/react";
 const Tasks = () => {
   const [allTasks, refetch] = useTasks();
-
+  // let [isOpen, setIsOpen] = useState(false);
   const formRef = useRef(null);
   const { user, loading } = useContext(AuthContext);
   const toDo = allTasks.filter((item) => item.category === "To Do");
@@ -21,7 +22,6 @@ const Tasks = () => {
 
   const handleAddTask = (e) => {
     e.preventDefault();
-    console.log("Form Submit");
     const form = e.target;
     const name = form.name.value;
     const description = form.description.value;
@@ -45,15 +45,15 @@ const Tasks = () => {
       .then((res) => {
         console.log(res.data);
         if (res.data.insertedId) {
-          formRef.current.reset();
-          refetch();
           toast.success("Task Added Successfully");
+          refetch();
+          formRef.current.reset();
         }
       })
       .catch((error) => {
         console.log(error);
       });
-    document.getElementById("my_modal_5").close();
+    document.getElementById("my_modal_4").close();
   };
   if (loading) return <Loading></Loading>;
   return (
@@ -63,7 +63,7 @@ const Tasks = () => {
           <TItle title="All Tasks"></TItle>
           <div>
             <button
-              onClick={() => document.getElementById("my_modal_5").showModal()}
+              onClick={() => document.getElementById("my_modal_4").showModal()}
               className="bg-[#6d7070] font-bold px-4 py-2 rounded-md text-white flex items-center hover:bg-[#f1f1f1] hover:text-black transition-all duration-300"
             >
               <Plus /> Add Task
@@ -115,7 +115,7 @@ const Tasks = () => {
       </section>
 
       <form ref={formRef} onSubmit={handleAddTask}>
-        <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+        <dialog id="my_modal_4" className="modal modal-bottom sm:modal-middle">
           <div className="modal-box">
             <label className="form-control w-full">
               <div className="label mb-2">
@@ -164,6 +164,77 @@ const Tasks = () => {
           </div>
         </dialog>
       </form>
+
+      {/* <Dialog
+        open={isOpen}
+        as="div"
+        className="relative z-10 focus:outline-none"
+        onClose={close}
+      >
+        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <DialogPanel
+              transition
+              className="w-full max-w-xl max-h-fit rounded-xl bg-[#bdbdbf] p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+            >
+              <form className="card-body" onSubmit={handleAddTask}>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-semibold text-[#333333]">
+                      Enter Task Title
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Title"
+                    className="input input-bordered rounded-full"
+                    required
+                  />
+                </div>
+
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-semibold text-[#333333]">
+                      Enter Category Image URL
+                    </span>
+                  </label>
+                  <textarea
+                    name="description"
+                    required
+                    placeholder="Add Your Description"
+                    className="w-full rounded-md h-[150px] resize-none textarea"
+                  ></textarea>
+                </div>
+
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-semibold text-[#333333]">
+                      Enter Category Quantity
+                    </span>
+                  </label>
+                  <input
+                    type="num,ber"
+                    name="quantity"
+                    placeholder="Your Category Quantity"
+                    className="input input-bordered rounded-full"
+                    required
+                  />
+                </div>
+
+                <div className="form-control mt-6">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="bg-[#a8a8a9] px-4 py-2 rounded-xl font-bold hover:bg-[#7d7d7f] hover:text-white hover:transition-colors hover:duration-300"
+                  >
+                    Add Task
+                  </button>
+                </div>
+              </form>
+            </DialogPanel>
+          </div>
+        </div>
+      </Dialog> */}
     </>
   );
 };
