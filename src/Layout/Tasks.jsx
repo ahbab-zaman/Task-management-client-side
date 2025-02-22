@@ -4,12 +4,15 @@ import TItle from "../SharedFiles/TItle";
 import Card from "../Components/Card";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { AuthContext } from "../AuthProvider/AuthProvider";
 import Loading from "../Components/Loading";
 import { Dialog, DialogPanel } from "@headlessui/react";
+import DropArea from "../Components/DropArea";
 const Tasks = () => {
-  const [allTasks, refetch] = useTasks() || [];
+  const [allTasks, refetch] = useTasks() || [[], () => {}];
+  const [tasks, setTasks] = useState([]);
+  const [activeCard, setActiveCard] = useState(null);
   const formRef = useRef(null);
   const { user, loading } = useContext(AuthContext);
   const toDo = allTasks.filter((item) => item.category === "To Do");
@@ -51,6 +54,23 @@ const Tasks = () => {
       });
     document.getElementById("my_modal_4").close();
   };
+
+  const onDrop = (status, position) => {
+    console.log(
+      `${activeCard} is going into the ${status} at the position of ${position}`
+    );
+    if (activeCard == null || activeCard === undefined) return;
+
+    const taskIndex = tasks.findIndex((task) => task.id === activeCard);
+    if (taskIndex === -1) return;
+
+    const taskToMove = { ...tasks[taskIndex], status };
+    const updatedTasks = tasks.filter((_, index) => index !== taskIndex);
+
+    updatedTasks.splice(position, 0, taskToMove);
+    setTasks(updatedTasks);
+  };
+
   if (loading) return <Loading></Loading>;
   return (
     <>
@@ -68,12 +88,22 @@ const Tasks = () => {
         </div>
         <div className="grid lg:grid-cols-3 grid-cols-1 gap-5 py-6">
           {/* To Do List */}
-          <div className="space-y-2 bg-[#f1f1f1] p-4 rounded-md">
+          <div className="space-y-2 bg-base-200 p-4 rounded-md">
             <h2 className="text-lg font-bold">TO DO</h2>
             {toDo.length > 0 ? (
               <>
+                <DropArea onDrop={() => onDrop(status, 0)}></DropArea>
                 {toDo.map((item, index) => (
-                  <Card item={item} key={item._id}></Card>
+                  <React.Fragment key={item._id}>
+                    <Card
+                      item={item}
+                      setActiveCard={setActiveCard}
+                      index={index}
+                    ></Card>
+                    <DropArea
+                      onDrop={() => onDrop(status, index + 1)}
+                    ></DropArea>
+                  </React.Fragment>
                 ))}
               </>
             ) : (
@@ -82,12 +112,22 @@ const Tasks = () => {
           </div>
 
           {/* In Progress List */}
-          <div className="space-y-2 bg-[#f1f1f1] p-4 rounded-md">
+          <div className="space-y-2 bg-base-200 p-4 rounded-md">
             <h2 className="text-lg font-bold">In Progress</h2>
             {inProgress.length > 0 ? (
               <>
+                <DropArea onDrop={() => onDrop(status, 0)}></DropArea>
                 {inProgress.map((item, index) => (
-                  <Card item={item} key={item._id}></Card>
+                  <React.Fragment key={item._id}>
+                    <Card
+                      item={item}
+                      setActiveCard={setActiveCard}
+                      index={index}
+                    ></Card>
+                    <DropArea
+                      onDrop={() => onDrop(status, index + 1)}
+                    ></DropArea>
+                  </React.Fragment>
                 ))}
               </>
             ) : (
@@ -98,12 +138,23 @@ const Tasks = () => {
           </div>
 
           {/* Done List */}
-          <div className="space-y-2 bg-[#f1f1f1] p-4 rounded-md">
+          <div className="space-y-2 bg-base-200 p-4 rounded-md">
             <h2 className="text-lg font-bold">Done</h2>
             {done.length > 0 ? (
               <>
+                <DropArea onDrop={() => onDrop(status, 0)}></DropArea>
                 {done.map((item, index) => (
-                  <Card item={item} key={item._id}></Card>
+                  <React.Fragment key={item._id}>
+                    <Card
+                      item={item}
+                      key={item._id}
+                      setActiveCard={setActiveCard}
+                      index={index}
+                    ></Card>
+                    <DropArea
+                      onDrop={() => onDrop(status, index + 1)}
+                    ></DropArea>
+                  </React.Fragment>
                 ))}
               </>
             ) : (
@@ -163,77 +214,6 @@ const Tasks = () => {
           </div>
         </dialog>
       </form>
-
-      {/* <Dialog
-        open={isOpen}
-        as="div"
-        className="relative z-10 focus:outline-none"
-        onClose={close}
-      >
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <DialogPanel
-              transition
-              className="w-full max-w-xl max-h-fit rounded-xl bg-[#bdbdbf] p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
-            >
-              <form className="card-body" onSubmit={handleAddTask}>
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text font-semibold text-[#333333]">
-                      Enter Task Title
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Your Title"
-                    className="input input-bordered rounded-full"
-                    required
-                  />
-                </div>
-
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text font-semibold text-[#333333]">
-                      Enter Category Image URL
-                    </span>
-                  </label>
-                  <textarea
-                    name="description"
-                    required
-                    placeholder="Add Your Description"
-                    className="w-full rounded-md h-[150px] resize-none textarea"
-                  ></textarea>
-                </div>
-
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text font-semibold text-[#333333]">
-                      Enter Category Quantity
-                    </span>
-                  </label>
-                  <input
-                    type="num,ber"
-                    name="quantity"
-                    placeholder="Your Category Quantity"
-                    className="input input-bordered rounded-full"
-                    required
-                  />
-                </div>
-
-                <div className="form-control mt-6">
-                  <button
-                    onClick={() => setIsOpen(false)}
-                    className="bg-[#a8a8a9] px-4 py-2 rounded-xl font-bold hover:bg-[#7d7d7f] hover:text-white hover:transition-colors hover:duration-300"
-                  >
-                    Add Task
-                  </button>
-                </div>
-              </form>
-            </DialogPanel>
-          </div>
-        </div>
-      </Dialog> */}
     </>
   );
 };

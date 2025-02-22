@@ -6,7 +6,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import useTasks from "../Hooks/useTasks";
 import showDeleteToast from "./showDeleteToast";
 import toast from "react-hot-toast";
-const Card = ({ item }) => {
+const Card = ({ item, setActiveCard }) => {
   const [, refetch] = useTasks();
   const { name, description, category, _id } = item;
   const today = new Date();
@@ -64,7 +64,12 @@ const Card = ({ item }) => {
   };
 
   return (
-    <div className="bg-base-100 px-6 py-3 rounded-md shadow-md  transform transition duration-300 hover:scale-95">
+    <div
+      className="bg-base-100 px-6 py-3 rounded-md shadow-md  transform transition duration-300 hover:scale-95 cursor-grab"
+      draggable
+      onDragStart={() => setActiveCard(_id)}
+      onDragEnd={() => setActiveCard(null)}
+    >
       <div>
         <h2 className="font-bold text-green-700">{name}</h2>
         <button
